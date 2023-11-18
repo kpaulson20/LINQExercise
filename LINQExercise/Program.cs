@@ -129,35 +129,37 @@ namespace AggregateOperators
             //ObjectDumper.Write(productCategoryCounts);
 
             //15. Return the list of products, ordered by product name
-            List<Product> productName = (from p in products 
-                                         orderby p.ProductName ascending
-                                         select p).ToList();
+            List<Product> productName = (from prod in products 
+                                         orderby prod.ProductName ascending
+                                         select prod).ToList();
 
             //16. Return the list of customers, ordered by country
-            List<Customer> orderCountry = (from c in customers
-                                          orderby c.Country ascending
-                                          select c).ToList();
+            List<Customer> cstByCountry = (from cst in customers
+                                           orderby cst.Country ascending
+                                           select cst).ToList();
+            Console.WriteLine(cstByCountry);
 
             //17. Return if there are any customers from Argentina
-            List<Customer> custArgentina = (from c in customers
+            List<Customer> cstArgentina = (from c in customers
                                            where c.Country == "Argentina"
                                            select c).ToList();
 
-            //18. Return which year had a higher total sales, 1997 or 1996 
+            Console.WriteLine("Number of customers from Argentina: " + cstArgentina.Count);
 
+            //18. Return which year had a higher total sales, 1997 or 1996 
+            
 
             //19. Return which year had a higher average order total, 1997 or 1998
 
 
             //20. Return whether Tofu is a product in the product catelog
-            bool Tofu = (from p in products
-                        select p).All(p => (p.ProductName == "Tofu"));
+
 
             //21. Return the number of orders altogether for all years in the database
 
 
             //22. Return how many customers are located in Paris
-            List<Customer> custParis = customers.Where(c => c.Country == "Paris").ToList();
+
 
             //23. Return whether there are products that are out of stock
 
