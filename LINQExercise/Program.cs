@@ -129,15 +129,16 @@ namespace AggregateOperators
             //ObjectDumper.Write(productCategoryCounts);
 
             //15. Return the list of products, ordered by product name
-            List<Product> productName = (from prod in products 
-                                         orderby prod.ProductName ascending
-                                         select prod).ToList();
+            List<Product> productsbyName = (from p in products
+                                            orderby p.ProductName ascending
+                                            select p).ToList();
+            samples.WriteProducts(productsbyName);
 
             //16. Return the list of customers, ordered by country
             List<Customer> cstByCountry = (from cst in customers
                                            orderby cst.Country ascending
                                            select cst).ToList();
-            Console.WriteLine(cstByCountry);
+            samples.WriteCustomers(cstByCountry);
 
             //17. Return if there are any customers from Argentina
             List<Customer> cstArgentina = (from c in customers
@@ -153,21 +154,32 @@ namespace AggregateOperators
 
 
             //20. Return whether Tofu is a product in the product catelog
-
+            bool productTofu = (from p in products
+                               where p.Category == "Tofu"
+                               select p).Any();
+            Console.WriteLine(productTofu);
 
             //21. Return the number of orders altogether for all years in the database
-
+            
+                                
 
             //22. Return how many customers are located in Paris
-
+            List < Customer > cstParis = (from c in customers
+                                          where c.City == "Paris"
+                                          select c).ToList();
+            Console.WriteLine("Number of customers located in Paris: " + cstParis.Count);
 
             //23. Return whether there are products that are out of stock
-
+            bool outOfStock = (from p in products
+                               where p.UnitsInStock == 1
+                               select p).Any();
+            Console.WriteLine(outOfStock);
 
             //24. Return the product with the highest amount of current stock
 
 
             //25. Pick your own query - explore a new LINQ method and write a query with the data provided here
+            
 
         }
 
