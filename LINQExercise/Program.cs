@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.ComponentModel;
 using static AggregateOperators.Program;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.CodeDom;
 
 namespace AggregateOperators
 {
@@ -148,16 +149,41 @@ namespace AggregateOperators
             Console.WriteLine("Number of customers from Argentina: " + cstArgentina.Count);
 
             //18. Return which year had a higher total sales, 1997 or 1996 
-            
+            var ordersPerYear = (from o in orders
+                                group o by new {year = o.OrderDate.Year}).ToList();
+            var year1996 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1996));
+            var year1997 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1997));
+            var year1998 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1998));
+            if (year1996.Count() > year1997.Count())
+            {
+                Console.WriteLine("1996 had the most orders");
+            }
+            else
+            {
+                Console.WriteLine("1997 had the most orders");
+            }
 
             //19. Return which year had a higher average order total, 1997 or 1998
-
+            var averageOrders = (from o in orders
+                                group o by new {year = o.OrderDate.Year}).ToList();
+            var year1997Average = averageOrders.Find(Order => new DateTime(Order.Key.year) == new DateTime(1997));
+            var year1998Average = averageOrders.Find(Order => new DateTime(Order.Key.year) == new DateTime(1998));
+            if (year1997Average.Count() > year1998Average.Count())
+            {
+                Console.WriteLine("1997 had a higher average for orders");
+            }
+            else
+            {
+                Console.WriteLine("1998 had a higher average for orders");
+            }
 
             //20. Return whether Tofu is a product in the product catelog
             bool productTofu = (from p in products
                                where p.Category == "Tofu"
                                select p).Any();
-            Console.WriteLine(productTofu);
+            if (productTofu == false) { Console.WriteLine("Tofu is not in the product catalog"); }
+            else { Console.WriteLine("Tofu is listed in the product catalog"); }
+           
 
             //21. Return the number of orders altogether for all years in the database
             
@@ -173,10 +199,14 @@ namespace AggregateOperators
             bool outOfStock = (from p in products
                                where p.UnitsInStock == 1
                                select p).Any();
-            Console.WriteLine(outOfStock);
+            if (outOfStock == false) { Console.WriteLine("There are no products out of stock"); }
+            else { Console.WriteLine("Ther are products that are out of stock"); }
 
             //24. Return the product with the highest amount of current stock
+            var highestStock = (from p in products
+                                group p by new { product = p.ProductName }).ToList();
 
+            Console.WriteLine("The product with the hightest amount of stock is: " + highestStock);
 
             //25. Pick your own query - explore a new LINQ method and write a query with the data provided here
             
