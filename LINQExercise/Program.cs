@@ -186,8 +186,10 @@ namespace AggregateOperators
            
 
             //21. Return the number of orders altogether for all years in the database
-            
-                                
+            List <Order> totalOrders = (from o in orders
+                                        where o.Total != 0
+                                        select o).ToList();
+            Console.WriteLine("Total Number of orders over all years: " + totalOrders.Count);
 
             //22. Return how many customers are located in Paris
             List < Customer > cstParis = (from c in customers
@@ -203,14 +205,17 @@ namespace AggregateOperators
             else { Console.WriteLine("Ther are products that are out of stock"); }
 
             //24. Return the product with the highest amount of current stock
-            var highestStock = (from p in products
-                                group p by new { product = p.ProductName }).ToList();
+            //var highestStock = (from p in products
+            //                    group p by new { product = p.ProductName }).ToList();
 
-            Console.WriteLine("The product with the hightest amount of stock is: " + highestStock);
+            //Console.WriteLine("The product with the highest amount of stock is: " + highestStock);
 
             //25. Pick your own query - explore a new LINQ method and write a query with the data provided here
-            
+            //var contact = (from CompanyName in customers
+            //               from phone in customers
+            //               select phone);
 
+            //Console.WriteLine(contact);
         }
 
         public class Product
