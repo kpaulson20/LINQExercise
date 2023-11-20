@@ -14,12 +14,12 @@ namespace AggregateOperators
     {
         static void Main(string[] args)
         {
-        //Need Help?
-        //see https://docs.microsoft.com/en-us/samples/dotnet/try-samples/101-linq-samples/
-        //or        https://linqsamples.com/
+            //Need Help?
+            //see https://docs.microsoft.com/en-us/samples/dotnet/try-samples/101-linq-samples/
+            //or        https://linqsamples.com/
 
             LinqSamples samples = new LinqSamples();
-            
+
             List<Customer> customers = samples.GetCustomerList();
             List<Product> products = samples.GetProductList();
 
@@ -30,15 +30,15 @@ namespace AggregateOperators
 
             List<Order> orders = (from c in customers
                                   from o in c.Orders
-                orderby o.OrderDate
-                select o).ToList();
+                                  orderby o.OrderDate
+                                  select o).ToList();
 
             samples.WriteOrders(orders);
 
             //2. Return a list of products, ordered by unit price descending
             List<Product> pr1 = (from p in products
-                orderby p.UnitPrice descending
-                select p).ToList();
+                                 orderby p.UnitPrice descending
+                                 select p).ToList();
 
             samples.WriteProducts(pr1);
 
@@ -55,7 +55,7 @@ namespace AggregateOperators
 
             //5. Return whether all products are less than $100 per unit
             bool pr3 = (from p in products
-                select p).All(p => (p.UnitPrice < 100));
+                        select p).All(p => (p.UnitPrice < 100));
 
             Console.WriteLine("Are all products less than $100?" + pr3);
 
@@ -76,38 +76,38 @@ namespace AggregateOperators
 
             //8. Return the list of distinct product categories
             List<string> distinctCategories = (from p in products
-                select p.Category).Distinct().ToList();
+                                               select p.Category).Distinct().ToList();
 
             //9. Return the product (by name) with the lowest and the highest prices per unit
             Product lowPrice = (from p in products
-                orderby p.UnitPrice, p.ProductName
-                select p).First();
+                                orderby p.UnitPrice, p.ProductName
+                                select p).First();
 
             Product highestPrice = (from p in products
-                orderby p.UnitPrice, p.ProductName
-                select p).Last();
+                                    orderby p.UnitPrice, p.ProductName
+                                    select p).Last();
 
-            Console.WriteLine("The lowest priced product is:" + 
+            Console.WriteLine("The lowest priced product is:" +
                 lowPrice.ProductName + " at " + lowPrice.UnitPrice);
 
             //10. Return the cost to buy one unit of each product in the catalog
             decimal totalCostForOneOfEach = (from p in products
-                select p).Sum(p => p.UnitPrice);
+                                             select p).Sum(p => p.UnitPrice);
 
-            Console.WriteLine("What is the total product price to buy one of each product?" 
+            Console.WriteLine("What is the total product price to buy one of each product?"
                 + totalCostForOneOfEach);
 
             //11. Return the name of all customers who placed at least one order before 1997
             List<string> customerNames = (from c in customers
-                                            from o in c.Orders
-                                            where o.OrderDate.Date.Year < 1997
-                                            select c.CompanyName).Distinct().ToList();
+                                          from o in c.Orders
+                                          where o.OrderDate.Date.Year < 1997
+                                          select c.CompanyName).Distinct().ToList();
 
             //12. Return the IDs for all orders over $1000
             List<int> ordersOver1k = (from c in customers
-                                        from o in c.Orders
-                                        where o.Total > 1000
-                                        select o.OrderID).ToList();
+                                      from o in c.Orders
+                                      where o.Total > 1000
+                                      select o.OrderID).ToList();
 
             //13. Return the average order cost for all orders placed
             decimal averageOrderCost = (from c in customers
@@ -116,14 +116,14 @@ namespace AggregateOperators
 
             //14. Return the product category with the most products in the catalog
             var productCategoryCounts = (from prod in products
-                group prod by prod.Category
+                                         group prod by prod.Category
                 into prodGroup
-                select new {Category = prodGroup.Key, ProductCount = prodGroup.Count()}
+                                         select new { Category = prodGroup.Key, ProductCount = prodGroup.Count() }
             ).ToList();
 
             int highestProductCatalogCount = productCategoryCounts.Max(pcc => pcc.ProductCount);
             string highestProductCatalogCountCategory = (from p in productCategoryCounts
-                where p.ProductCount == highestProductCatalogCount
+                                                         where p.ProductCount == highestProductCatalogCount
                                                          select p.Category).First();
             Console.WriteLine("The product with the most items in the catalog is: "
                 + highestProductCatalogCountCategory);
@@ -150,7 +150,7 @@ namespace AggregateOperators
 
             //18. Return which year had a higher total sales, 1997 or 1996 
             var ordersPerYear = (from o in orders
-                                group o by new {year = o.OrderDate.Year}).ToList();
+                                 group o by new { year = o.OrderDate.Year }).ToList();
             var year1996 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1996));
             var year1997 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1997));
             var year1998 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1998));
@@ -165,7 +165,7 @@ namespace AggregateOperators
 
             //19. Return which year had a higher average order total, 1997 or 1998
             var averageOrders = (from o in orders
-                                group o by new {year = o.OrderDate.Year}).ToList();
+                                 group o by new { year = o.OrderDate.Year }).ToList();
             var year1997Average = averageOrders.Find(Order => new DateTime(Order.Key.year) == new DateTime(1997));
             var year1998Average = averageOrders.Find(Order => new DateTime(Order.Key.year) == new DateTime(1998));
             if (year1997Average.Count() > year1998Average.Count())
@@ -179,22 +179,22 @@ namespace AggregateOperators
 
             //20. Return whether Tofu is a product in the product catelog
             bool productTofu = (from p in products
-                               where p.Category == "Tofu"
-                               select p).Any();
+                                where p.Category == "Tofu"
+                                select p).Any();
             if (productTofu == false) { Console.WriteLine("Tofu is not in the product catalog"); }
             else { Console.WriteLine("Tofu is listed in the product catalog"); }
-           
+
 
             //21. Return the number of orders altogether for all years in the database
-            List <Order> totalOrders = (from o in orders
-                                        where o.Total != 0
-                                        select o).ToList();
-            Console.WriteLine("Total Number of orders over all years: " + totalOrders.Count);
+            List<Order> totalOrders = (from o in orders
+                                       where o.Total != 0
+                                       select o).ToList();
+            Console.WriteLine("Total number of orders in the database: " + totalOrders.Count);
 
             //22. Return how many customers are located in Paris
-            List < Customer > cstParis = (from c in customers
-                                          where c.City == "Paris"
-                                          select c).ToList();
+            List<Customer> cstParis = (from c in customers
+                                       where c.City == "Paris"
+                                       select c).ToList();
             Console.WriteLine("Number of customers located in Paris: " + cstParis.Count);
 
             //23. Return whether there are products that are out of stock
@@ -205,17 +205,16 @@ namespace AggregateOperators
             else { Console.WriteLine("Ther are products that are out of stock"); }
 
             //24. Return the product with the highest amount of current stock
-            //var highestStock = (from p in products
-            //                    group p by new { product = p.ProductName }).ToList();
+            var highestInStock = (from p in products
+                                      orderby p.UnitsInStock descending
+                                      select p).ToList();
 
-            //Console.WriteLine("The product with the highest amount of stock is: " + highestStock);
+            Console.WriteLine("Product with the most in stock: " + highestInStock.ProductName);
 
             //25. Pick your own query - explore a new LINQ method and write a query with the data provided here
-            //var contact = (from CompanyName in customers
-            //               from phone in customers
-            //               select phone);
-
-            //Console.WriteLine(contact);
+            List<Product> productThenBy = products.OrderBy(p => p.ProductName).ThenBy(p => p.ProductID).ToList();
+            Console.WriteLine("List of products by alphabetically name with corresponding IDs: ");
+            foreach (Product product in productThenBy) {  Console.WriteLine(product.ProductName + " : " + product.ProductID); }
         }
 
         public class Product
