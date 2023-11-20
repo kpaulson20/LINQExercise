@@ -155,6 +155,7 @@ namespace AggregateOperators
                                  group o by new { year = o.OrderDate.Year }).ToList();
             var year1996 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1996));
             var year1997 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1997));
+            var year1998 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1998));
 
             if (year1996.Count() > year1997.Count())
             {
@@ -166,12 +167,13 @@ namespace AggregateOperators
             }
 
             //19. Return which year had a higher average order total, 1997 or 1998
-            var averageOrders = (from o in orders
-                                 group o by new { year = o.OrderDate.Year }).ToList();
-            var year1997Average = averageOrders.Find(Total => new DateTime(Total.Key.year) == new DateTime(1997));
-            var year1998Average = averageOrders.Find(Total => new DateTime(Total.Key.year) == new DateTime(1998));
-
-            if (year1997Average.Count() > year1998Average.Count())
+            var total1997 = (from o in year1997
+                             select o.Total).ToArray();
+            var total1998 = (from o in year1998
+                             select o.Total).ToArray();
+            var avg1997 = total1997.Average();
+            var avg1998 = total1998.Average();
+            if (avg1997 > avg1998)
             {
                 Console.WriteLine("1997 had a higher average for orders");
             }
