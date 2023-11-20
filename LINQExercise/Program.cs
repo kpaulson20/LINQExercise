@@ -153,7 +153,7 @@ namespace AggregateOperators
                                  group o by new { year = o.OrderDate.Year }).ToList();
             var year1996 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1996));
             var year1997 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1997));
-            var year1998 = ordersPerYear.Find(Order => new DateTime(Order.Key.year) == new DateTime(1998));
+
             if (year1996.Count() > year1997.Count())
             {
                 Console.WriteLine("1996 had the most orders");
@@ -166,8 +166,9 @@ namespace AggregateOperators
             //19. Return which year had a higher average order total, 1997 or 1998
             var averageOrders = (from o in orders
                                  group o by new { year = o.OrderDate.Year }).ToList();
-            var year1997Average = averageOrders.Find(Order => new DateTime(Order.Key.year) == new DateTime(1997));
-            var year1998Average = averageOrders.Find(Order => new DateTime(Order.Key.year) == new DateTime(1998));
+            var year1997Average = averageOrders.Find(Total => new DateTime(Total.Key.year) == new DateTime(1997));
+            var year1998Average = averageOrders.Find(Total => new DateTime(Total.Key.year) == new DateTime(1998));
+
             if (year1997Average.Count() > year1998Average.Count())
             {
                 Console.WriteLine("1997 had a higher average for orders");
@@ -206,15 +207,17 @@ namespace AggregateOperators
 
             //24. Return the product with the highest amount of current stock
             var highestInStock = (from p in products
-                                      orderby p.UnitsInStock descending
-                                      select p).ToList();
+                                  orderby p.UnitsInStock descending
+                                  select p).First();
 
             Console.WriteLine("Product with the most in stock: " + highestInStock.ProductName);
 
             //25. Pick your own query - explore a new LINQ method and write a query with the data provided here
             List<Product> productThenBy = products.OrderBy(p => p.ProductName).ThenBy(p => p.ProductID).ToList();
             Console.WriteLine("List of products by alphabetically name with corresponding IDs: ");
-            foreach (Product product in productThenBy) {  Console.WriteLine(product.ProductName + " : " + product.ProductID); }
+
+            foreach (Product product in productThenBy) 
+            {  Console.WriteLine(product.ProductName + " : " + product.ProductID); }
         }
 
         public class Product
