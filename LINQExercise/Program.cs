@@ -133,12 +133,14 @@ namespace AggregateOperators
             List<Product> productsbyName = (from p in products
                                             orderby p.ProductName ascending
                                             select p).ToList();
+            Console.WriteLine("--List of products by name--");
             samples.WriteProducts(productsbyName);
 
             //16. Return the list of customers, ordered by country
             List<Customer> cstByCountry = (from cst in customers
                                            orderby cst.Country ascending
                                            select cst).ToList();
+            Console.WriteLine("--List of customers by country--");
             samples.WriteCustomers(cstByCountry);
 
             //17. Return if there are any customers from Argentina
@@ -156,11 +158,11 @@ namespace AggregateOperators
 
             if (year1996.Count() > year1997.Count())
             {
-                Console.WriteLine("1996 had the most orders");
+                Console.WriteLine("1996 had the most sales");
             }
             else
             {
-                Console.WriteLine("1997 had the most orders");
+                Console.WriteLine("1997 had the most sales");
             }
 
             //19. Return which year had a higher average order total, 1997 or 1998
@@ -203,7 +205,7 @@ namespace AggregateOperators
                                where p.UnitsInStock == 1
                                select p).Any();
             if (outOfStock == false) { Console.WriteLine("There are no products out of stock"); }
-            else { Console.WriteLine("Ther are products that are out of stock"); }
+            else { Console.WriteLine("There are products that are out of stock"); }
 
             //24. Return the product with the highest amount of current stock
             var highestInStock = (from p in products
@@ -213,8 +215,9 @@ namespace AggregateOperators
             Console.WriteLine("Product with the most in stock: " + highestInStock.ProductName);
 
             //25. Pick your own query - explore a new LINQ method and write a query with the data provided here
-            List<Product> productThenBy = products.OrderBy(p => p.ProductName).ThenBy(p => p.ProductID).ToList();
-            Console.WriteLine("List of products by alphabetically name with corresponding IDs: ");
+            List<Product> productThenBy = products.OrderBy(p => p.ProductName)
+                                          .ThenBy(p => p.ProductID).ToList();
+            Console.WriteLine("--List of products listed alphabetically by name with corresponding IDs--");
 
             foreach (Product product in productThenBy) 
             {  Console.WriteLine(product.ProductName + " : " + product.ProductID); }
